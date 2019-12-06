@@ -1,12 +1,12 @@
+use crate::util;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Debug;
-use crate::util;
 
 #[derive(Debug, Clone)]
 pub struct Object {
     pub name: String,
     pub par: Option<String>,
-    pub children: Vec<String>
+    pub children: Vec<String>,
 }
 
 fn read_input() -> (BTreeMap<String, Object>, String) {
@@ -24,14 +24,22 @@ fn read_input() -> (BTreeMap<String, Object>, String) {
             if !map.contains_key(&o1) {
                 map.insert(
                     o1.clone(),
-                    Object{name: o1.clone(), par: None, children: Vec::new()}
+                    Object {
+                        name: o1.clone(),
+                        par: None,
+                        children: Vec::new(),
+                    },
                 );
             }
 
             if !map.contains_key(&o2) {
                 map.insert(
                     o2.clone(),
-                    Object{name: o2.clone(), par: Some(o1.clone()), children: Vec::new()}
+                    Object {
+                        name: o2.clone(),
+                        par: Some(o1.clone()),
+                        children: Vec::new(),
+                    },
                 );
             }
 
@@ -51,21 +59,23 @@ fn read_input() -> (BTreeMap<String, Object>, String) {
         });
 
     let parents: Vec<String> = par.iter().map(|val| val).cloned().collect();
-    (
-        map,
-        parents[0].clone()
-    )
+    (map, parents[0].clone())
 }
 
-fn run(inp: &BTreeMap<String, Object>, cur: String, sum: u32, req: bool, target: Option<String>) -> (u32, bool) {
+fn run(
+    inp: &BTreeMap<String, Object>,
+    cur: String,
+    sum: u32,
+    req: bool,
+    target: Option<String>,
+) -> (u32, bool) {
     let mut found = false;
     (
-        inp
-            .get(&cur)
+        inp.get(&cur)
             .expect("Nothing?")
             .children
             .iter()
-            .fold(sum, | acc, next | {
+            .fold(sum, |acc, next| {
                 if req {
                     if *next == target.clone().expect("nothing") {
                         found = true;
@@ -83,7 +93,7 @@ fn run(inp: &BTreeMap<String, Object>, cur: String, sum: u32, req: bool, target:
                     acc + run(inp, next.clone(), sum + 1, req, target.clone()).0
                 }
             }),
-        found
+        found,
     )
 }
 
@@ -126,6 +136,8 @@ pub fn part1() {
 
 pub fn part2() {
     let inp = read_input();
-    println!("part2: {}", lca(&(inp.0), String::from("YOU"), String::from("SAN")));
+    println!(
+        "part2: {}",
+        lca(&(inp.0), String::from("YOU"), String::from("SAN"))
+    );
 }
-

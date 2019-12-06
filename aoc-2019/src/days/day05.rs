@@ -1,17 +1,18 @@
-use std::io;
 use crate::util;
+use std::io;
 
 fn read_input() -> Vec<i32> {
     let input: Vec<String> = util::read_file("input/day05.txt")
         .trim()
         .split(",")
-        .map(|val| { String::from(val) })
+        .map(|val| String::from(val))
         .collect();
 
     input
         .iter()
         .map(|val| {
-            val.as_str().parse::<i32>()
+            val.as_str()
+                .parse::<i32>()
                 .expect("String is not a valid i32 value")
         })
         .collect()
@@ -152,7 +153,6 @@ fn run_program(mut inp: Vec<i32>) -> Vec<i32> {
 
             index += 4;
         }
-
     }
 
     inp
@@ -169,4 +169,3 @@ pub fn part2() {
     let inp = read_input();
     run_program(inp);
 }
-

@@ -4,13 +4,14 @@ fn read_input() -> Vec<usize> {
     let input: Vec<String> = util::read_file("input/day02.txt")
         .trim()
         .split(",")
-        .map(|val| { String::from(val) })
+        .map(|val| String::from(val))
         .collect();
 
     input
         .iter()
         .map(|val| {
-            val.as_str().parse::<usize>()
+            val.as_str()
+                .parse::<usize>()
                 .expect("String is not a valid usize value")
         })
         .collect()

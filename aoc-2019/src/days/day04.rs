@@ -5,14 +5,13 @@ fn read_input() -> Vec<u32> {
         .as_str()
         .trim()
         .split("-")
-        .map(|val| { String::from(val) })
+        .map(|val| String::from(val))
         .collect();
 
     input
         .iter()
         .map(|val| {
-            val
-                .as_str()
+            val.as_str()
                 .parse::<u32>()
                 .expect("String is not a valid u32 value")
         })
@@ -25,11 +24,7 @@ fn works(input: u32, rule: bool) -> (bool, bool) {
     let g: String = format!("{}", input);
     let vv: Vec<u32> = g
         .chars()
-        .map(|val: char| {
-            val
-                .to_digit(10)
-                .expect("whatever")
-        })
+        .map(|val: char| val.to_digit(10).expect("whatever"))
         .collect();
 
     let mut i = 0;
@@ -77,7 +72,7 @@ fn run(input: Vec<u32>, rule: bool) -> String {
             count += 1;
         }
 
-        i+= 1;
+        i += 1;
     }
     format!("something {:?}", count)
 }
@@ -91,4 +86,3 @@ pub fn part2() {
     let inp = read_input();
     println!("{:?}", run(inp, true));
 }
-

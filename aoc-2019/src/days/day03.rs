@@ -3,8 +3,8 @@ use std::collections::BTreeMap;
 pub use crate::util;
 
 struct Move {
-    dir: (i32,i32),
-    dis: i32
+    dir: (i32, i32),
+    dis: i32,
 }
 
 const U: &str = "U";
@@ -17,52 +17,47 @@ fn read_moves(line: String) -> Vec<Move> {
         .as_str()
         .trim()
         .split(",")
-        .map(|val| { String::from(val) })
+        .map(|val| String::from(val))
         .collect();
 
     input
         .iter()
         .map(|val| {
-            let dir = find_dir(
-                String::from(val.as_str().get(0..1).expect("Nothing"))
-            );
+            let dir = find_dir(String::from(val.as_str().get(0..1).expect("Nothing")));
             let dis = val
                 .as_str()
                 .get(1..)
                 .expect("Nothing")
                 .parse::<i32>()
                 .expect("String is not a valid i32 value");
-            Move{dir: dir, dis: dis}
+            Move { dir: dir, dis: dis }
         })
         .collect()
 }
 
 fn read_input() -> (Vec<Move>, Vec<Move>) {
     let lines = util::read_lines(util::read_file("input/day03.txt"));
-    (
-        read_moves(lines[0].clone()),
-        read_moves(lines[1].clone())
-    )
+    (read_moves(lines[0].clone()), read_moves(lines[1].clone()))
 }
 
-fn calc_dist(loc: (i32,i32)) -> i32 {
+fn calc_dist(loc: (i32, i32)) -> i32 {
     i32::abs(loc.0) + i32::abs(loc.1)
 }
 
-fn find_dir(dir: String) -> (i32,i32) {
+fn find_dir(dir: String) -> (i32, i32) {
     match dir.as_str() {
-        U => (0,1),
-        R => (1,0),
-        D => (0,-1),
-        L => (-1,0),
-        _ => (0,0)
+        U => (0, 1),
+        R => (1, 0),
+        D => (0, -1),
+        L => (-1, 0),
+        _ => (0, 0),
     }
 }
 
-fn run(snake1: Vec<Move>, snake2: Vec<Move>) -> (i32,i32) {
+fn run(snake1: Vec<Move>, snake2: Vec<Move>) -> (i32, i32) {
     let mut x = 0;
     let mut y = 0;
-    let mut set: BTreeMap<(i32,i32),i32> = BTreeMap::new();
+    let mut set: BTreeMap<(i32, i32), i32> = BTreeMap::new();
     let mut dx;
     let mut dy;
     let mut num_steps = 0;
@@ -83,11 +78,11 @@ fn run(snake1: Vec<Move>, snake2: Vec<Move>) -> (i32,i32) {
                     x += dx;
                     y += dy;
                     num_steps += 1;
-                    set.insert((x,y), num_steps);
+                    set.insert((x, y), num_steps);
                     num_go -= 1;
                 }
-            },
-            None => { break }
+            }
+            None => break,
         };
     }
 
@@ -107,7 +102,7 @@ fn run(snake1: Vec<Move>, snake2: Vec<Move>) -> (i32,i32) {
                 while num_go > 0 {
                     x += dx;
                     y += dy;
-                    let tuple = (x,y);
+                    let tuple = (x, y);
                     num_steps += 1;
                     if set.contains_key(&tuple) {
                         if calc_dist(tuple) < best {
@@ -121,8 +116,8 @@ fn run(snake1: Vec<Move>, snake2: Vec<Move>) -> (i32,i32) {
 
                     num_go -= 1;
                 }
-            },
-            None => { break }
+            }
+            None => break,
         };
     }
 
@@ -142,4 +137,3 @@ pub fn part2() {
     let v2 = snakes.1;
     println!("{:?}", run(v1, v2).1);
 }
-

@@ -1,5 +1,5 @@
-pub mod util;
 pub mod days;
+pub mod util;
 
 fn main() {
     // Day 1
@@ -26,4 +26,3 @@ fn main() {
     days::day06::part1();
     days::day06::part2();
 }
-

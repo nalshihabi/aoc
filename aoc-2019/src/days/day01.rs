@@ -5,22 +5,21 @@ fn read_input() -> Vec<i32> {
     util::read_lines(input)
         .iter()
         .map(|val| {
-            val.as_str().parse::<i32>()
+            val.as_str()
+                .parse::<i32>()
                 .expect("String is not a valid i32 value")
         })
         .collect()
 }
 
 fn calc_needed_simple() -> i32 {
-    read_input().iter().fold(0, | sum, val | { sum + (val / 3 - 2) })
+    read_input().iter().fold(0, |sum, val| sum + (val / 3 - 2))
 }
 
 fn calc_needed_complex() -> i32 {
     read_input()
         .iter()
-        .fold(0, | sum, val | {
-            sum + calc_needed_for_gas(val)
-        })
+        .fold(0, |sum, val| sum + calc_needed_for_gas(val))
 }
 
 fn calc_needed_for_gas(mass: &i32) -> i32 {
