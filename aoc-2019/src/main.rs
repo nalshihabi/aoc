@@ -23,6 +23,10 @@ fn main() {
     // days::day05::part2();
 
     // Day 6
-    days::day06::part1();
-    days::day06::part2();
+    // days::day06::part1();
+    // days::day06::part2();
+
+    // Day 7
+    days::day07::part1();
+    days::day07::part2();
 }
