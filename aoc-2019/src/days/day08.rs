@@ -6,15 +6,14 @@ fn read_input() -> String {
 
 fn parse_input(input: &String) -> Vec<Vec<usize>> {
     println!("{} {} {}", input.len(), input.len() / 6, input.len() / 6 / 25);
-    let mut ans: Vec<Vec<usize>> = vec![];
-    let mut i = 0;
+    // let ans: Vec<Vec<usize>> = vec![];
+    let i = 0;
     let step = input.len() / 6;
     let jstep = input.len() / 6 / 25;
 
     while i < input.len() {
         let mut j = 0;
         while j < i + step {
-            
             j += jstep;
         }
     }
