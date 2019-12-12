@@ -1,7 +1,11 @@
+extern crate regex;
+
 use crate::util;
 use crate::util::lcm;
 use std::cmp::Ordering;
 use std::iter;
+
+use regex::Regex;
 
 type Velocity = (i64, i64, i64);
 
@@ -17,26 +21,19 @@ struct Moon {
 
 impl Moon {
     fn new(string: String) -> Self {
-        let equals: Vec<_> = string.match_indices('=').collect();
-        let commas: Vec<_> = string.match_indices(',').collect();
-        let inp = string.as_str();
-        Moon{
-            x: string.get(equals[0].0+1..commas[0].0)
-                .expect("Non string")
-                .parse()
-                .expect("Not a number"),
-            y: string.get(equals[1].0+1..commas[1].0)
-                .expect("Non string")
-                .parse()
-                .expect("Not a number"),
-            z: string.get(equals[2].0+1..inp.len()-1)
-                .expect("Non string")
-                .parse()
-                .expect("Not a number"),
-            vx: 0,
-            vy: 0,
-            vz: 0,
+        let mut x: i64 = 0;
+        let mut y: i64 = 0;
+        let mut z: i64 = 0;
+
+        let re: Regex = Regex::new(r"<x=(-?\d+), y=(-?\d+), z=(-?\d{1}+)>$").unwrap();
+        for cap in re.captures_iter(string.as_str()) {
+            println!("read {:?}", cap);
+            x = cap[1].parse().unwrap();
+            y = cap[2].parse().unwrap();
+            z = cap[3].parse().unwrap();
         }
+
+        Moon{x: x, y: y, z: z, vx: 0, vy: 0, vz: 0}
     }
 
     fn calc_gravity(&self, velocity: Velocity, other: &Moon) -> Velocity {
@@ -73,8 +70,6 @@ impl Moon {
         self.x += self.vx;
         self.y += self.vy;
         self.z += self.vz;
-
-        // println!("    Getting myself -- {:?} {:?}", self, velocity);
     }
 
     fn calc_energy(&self) -> i64 {
