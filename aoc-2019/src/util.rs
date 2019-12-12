@@ -23,7 +23,7 @@ type Instruction = (i64, i64, i64, i64);
 pub struct Vm {
     index: usize,
     program: Vec<i64>,
-    running: bool,
+    pub running: bool,
     pub display: bool,
     pub debug_display: bool,
     base: usize,
@@ -299,6 +299,18 @@ impl Vm {
         None
     }
 
+    pub fn step_until_input(&mut self) {
+        while self.running && self.program[self.index] % 10 != 3 {
+            self.step(None);
+        }
+    }
+
+    pub fn step_until_print(&mut self) {
+        while self.running && self.program[self.index] % 10 != 4 {
+            self.step(None);
+        }
+    }
+
     pub fn step(&mut self, input: Option<i64>) -> Option<i64> {
         let inst = self.parse_instruction(self.program[self.index]);
         if self.debug_display {
@@ -346,4 +358,15 @@ impl Vm {
             };
         }
     }
+}
+
+pub fn gcd(a: usize, b: usize) -> usize {
+    match a % b {
+        0 => b,
+        _ => gcd(b, a % b)
+    }
+}
+
+pub fn lcm(a: usize, b: usize) -> usize {
+    a * b / gcd(a, b)
 }
