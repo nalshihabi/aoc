@@ -20,13 +20,15 @@ pub fn read_lines(input: String) -> Vec<String> {
 }
 
 type Instruction = (i64, i64, i64, i64);
+#[derive(Clone)]
 pub struct Vm {
     index: usize,
-    program: Vec<i64>,
+    pub program: Vec<i64>,
     pub running: bool,
     pub display: bool,
     pub debug_display: bool,
     base: usize,
+    pub output: Vec<i64>,
 }
 
 impl Vm {
@@ -42,6 +44,7 @@ impl Vm {
             display: false,
             debug_display: false,
             base: 0,
+            output: Vec::new(),
         }
     }
 
@@ -62,6 +65,12 @@ impl Vm {
             .collect();
 
         Vm::new(program)
+    }
+
+    pub fn clear_output(&mut self) -> Vec<i64> {
+        let output = self.output.clone();
+        self.output = Vec::new();
+        output
     }
 
     fn parse_instruction(&self, mut num: i64) -> Instruction {
@@ -240,6 +249,7 @@ impl Vm {
             println!("{}", p1);
         }
 
+        self.output.push(p1);
         self.inc_index(2);
         Some(p1)
     }
@@ -295,7 +305,7 @@ impl Vm {
     fn mvb(&mut self, inst: Instruction) -> Option<i64> {
         let (p1, _p2, _de) = self.read_parameters(inst);
         self.set_base(((self.base as i64) + p1) as usize);
-        self.inc_index(2);
+         self.inc_index(2);
         None
     }
 
@@ -350,7 +360,7 @@ impl Vm {
         while self.running {
             match self.step(None) {
                 Some(value) => {
-                    if !self.display {
+                    if self.display {
                         println!("{}", value);
                     }
                 },
