@@ -55,6 +55,10 @@ fn main() {
     // days::day13::part2();
 
     // Day 14
-    days::day14::part1();
-    days::day14::part2();
+    // days::day14::part1();
+    // days::day14::part2();
+
+    // Day 15
+    days::day15::part1();
+    days::day15::part2();
 }
