@@ -5,7 +5,6 @@ use std::cmp::{max, Ordering};
 type Loc = (usize, usize);
 type Map = BTreeMap<Loc, i64>;
 type Grid = Vec<Vec<i64>>;
-type Moment = (usize, usize, usize);
 
 fn parse_output(output: &Vec<i64>, map: &mut Map) -> Loc {
     let mut largest_row = 0;
@@ -27,27 +26,6 @@ fn parse_output(output: &Vec<i64>, map: &mut Map) -> Loc {
             map.insert(loc, val);
         });
     (largest_row, largest_col)
-}
-
-fn get_score(output: Vec<i64>) -> (Option<usize>, usize) {
-    let mut score: usize = 0;
-    let mut ball_row: usize = 0;
-    output
-        .iter()
-        .enumerate()
-        .step_by(3)
-        .for_each(|cur| {
-            score = match cur.1 {
-                -1 => output[cur.0 + 2] as usize,
-                _ => score
-            };
-
-            if output[cur.0 + 2] == 4 {
-                // println!("Getting vals {} {}", 
-                ball_row = output[cur.0 + 1] as usize;
-            }
-        });
-    (Some(score), ball_row)
 }
 
 fn run0() -> (Map, Loc) {
@@ -115,70 +93,16 @@ fn _find_paddle(map: &Map) -> Loc {
     })
 }
 
-fn recur(vm: &mut Vm, score: usize, step: usize, loc: usize, memo: &mut BTreeMap<Moment, usize>, steps: &mut Vec<i64>) -> usize {
-    match memo.get(&(score, step, loc)) {
-        Some(s) => { return *s },
-        None => {},
-    };
-
-    // println!("score {}, step {}, loc {} len {}", score, step, loc, steps.len());
-
-    vm.step_until_input();
-    let (sv, ball_row) = get_score(vm.clear_output());
-    let mut cur_score = score + match sv {
-        Some(s) => s,
-        None => 0
-    };
-
-    if ball_row == 23 {
-        println!("Early end score {} {} {}", cur_score, step, steps.len());
-        return cur_score;
-    }
-
-    if !vm.running {
-        println!("A Score {}", cur_score);
-        if score == 80683 {
-            println!("Things {:?}", steps);
-        }
-        return cur_score;
-    }
-
-    for opt in [-1, 0, 1].iter() {
-        let mut nvm = vm.clone();
-        nvm.step(Some(opt.clone()));
-        let new_loc = match (loc as i64) + opt {
-            0 => 1,
-            41 => 40,
-            _ => (loc as i64) + opt,
-        } as usize;
-        steps.push(opt.clone());
-        let rscore = recur(&mut nvm, cur_score, step + 1, new_loc, memo, steps);
-        steps.pop();
-        cur_score = max(cur_score, rscore);
-    }
-
-    memo.insert((score, step, loc), cur_score);
-    cur_score
-}
-
 fn run_with_input() {
-    // let input = [-1, 0, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 0, 1, 1, 1, 1, 1, 1, 1, 1, -1, 0, 1, 1, 1, 0];
     let (map, size) = run0();
     let mut grid = make_grid(&map, size);
     draw_grid(&grid);
-    // let mut iter = input.iter();
-    let mut ind: usize = 0;
 
     let mut vm = Vm::new_with_file("input/day13.txt");
     vm.display = false;
-    // vm.debug_display = true;
-    // vm.debug_display = true;
     vm.program[0] = 2;
     vm.program[381] = 3;
-    // vm.run();
 
-    // vm.debug_display = true;
-    let mut prev: Vec<i64> = Vec::new();
     while vm.running {
         vm.step_until_input();
 
@@ -198,19 +122,9 @@ fn run_with_input() {
             Ordering::Less => -1
         };
 
-        // let diffs: Vec<(usize, (&i64, &i64))> = prev
-        //     .iter()
-        //     .zip(vm.program.iter())
-        //     .enumerate()
-        //     .filter(|(_ind, (pre, cur))| pre != cur)
-        //     .collect();
-
-        // println!("Diffs: {:?}", diffs);
         println!("Next input: {} | ball {:?} paddle {:?}\n", next_input, _ball, _paddle);
 
         vm.step(Some(next_input));
-        prev = vm.program.clone();
-        ind += 1;
     }
 }
 
