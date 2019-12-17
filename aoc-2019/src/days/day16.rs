@@ -84,8 +84,8 @@ fn calc_band(start: usize, input: &Vec<i32>, sums: &Vec<i32>, ans: &mut Vec<i32>
     let mut beg = start;
     let mut end = start + 1;
     let mut index = 0;
-    let db = start;
-    let de = start + 1;
+    let db = start + 1;
+    let de = start + 2;
 
     while beg < input.len() {
         let sum = match end == input.len() {
