@@ -88,9 +88,9 @@ fn calc_band(start: usize, input: &Vec<i32>, sums: &Vec<i32>, ans: &mut Vec<i32>
     let de = start + 2;
 
     while beg < input.len() {
-        let sum = match end == input.len() {
+        let sum = match end <= input.len() {
             true => sums[end - 1] - sums[beg] + input[beg],
-            false => sums[end - 1] - sums[beg] + input[beg],
+            false => sums[input.len() - 1] - sums[beg] + input[beg],
         };
 
         ans[index] = match neg {
@@ -127,7 +127,7 @@ fn fast_phase(input: Vec<i32>) -> Vec<i32> {
 
 fn make_big(mut input: Vec<i32>) -> Vec<i32> {
     let orig = input.clone();
-    for _ in 0..6 {
+    for _ in 0..10000 {
         input.append(&mut orig.clone());
     }
 
@@ -144,7 +144,7 @@ fn run_faster(mut input: Vec<i32>) -> Vec<i32> {
         // let ff = fast_phase(ff);
         // input = _run_phase(input, true);
         // input = ff;
-        println!("{:?}\n", input);
+        // println!("{:?}\n", input);
         // println!("fast {:?}\n", ff);
 
         input = fast_phase(input);
@@ -164,7 +164,7 @@ fn get_index(input: &Vec<i32>) -> usize {
 
 pub fn part1() {
     let mut inp = read_input();
-    let print_it = true;
+    let print_it = false;
 
     for _i in 0..100 {
         // println!("{} {:?}", _i, inp);
